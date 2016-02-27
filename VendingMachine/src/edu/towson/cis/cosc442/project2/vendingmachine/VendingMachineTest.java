@@ -19,7 +19,7 @@ public class VendingMachineTest {
 
 		item1 = new VendingMachineItem("Test1", cost1);
 		item2 = new VendingMachineItem("Test2", cost2);
-		
+
 	}
 
 	@After
@@ -46,20 +46,25 @@ public class VendingMachineTest {
 	public void testRemoveItem() {
 		vend1.addItem(item1, "A");
 		assertEquals(item1, vend1.removeItem("A"));
+	}
 
+	@Test
+	public void testRemoveItemException() {
 		try {
 			vend1.removeItem("B");
 			fail("Expected Exception");
 		} catch (VendingMachineException e) {
 
 		}
-
 	}
 
 	@Test
 	public void testInsertMoney() {
 		vend1.insertMoney(20);
+	}
 
+	@Test
+	public void testInsertMoneyException() {
 		try {
 			vend1.insertMoney(-20);
 			fail("Expected Exception");
@@ -70,29 +75,47 @@ public class VendingMachineTest {
 
 	@Test
 	public void testGetBalance() {
-		assertEquals(0, vend1.getBalance(), .01);
-		
 		vend1.insertMoney(20);
-		assertEquals(20,vend1.getBalance(), .01);
+		assertEquals(20, vend1.getBalance(), .01);
+	}
+
+	@Test
+	public void testGetBalanceNoMoney() {
+		assertEquals(0, vend1.getBalance(), .01);
 	}
 
 	@Test
 	public void testMakePurchase() {
 		vend1.insertMoney(20);
 		vend1.addItem(item1, "A");
-		assertEquals(true,vend1.makePurchase("A"));
-		assertEquals(10,vend1.getBalance(), .01);
-		
-		assertEquals(false,vend1.makePurchase("B"));
+		assertEquals(true, vend1.makePurchase("A"));
+		assertEquals(10, vend1.getBalance(), .01);
+	}
+
+	@Test
+	public void testMakePurchaseNoItem() {
+		assertEquals(false, vend1.makePurchase("B"));
+	}
+
+	@Test
+	public void testMakePurchaseNoMoney() {
 		vend1.addItem(item2, "B");
-		assertEquals(false,vend1.makePurchase("B"));
+		assertEquals(false, vend1.makePurchase("B"));
 	}
 
 	@Test
 	public void testReturnChange() {
 		vend1.insertMoney(20);
-		assertEquals(20,vend1.returnChange(), .01);
-		
+		assertEquals(20, vend1.returnChange(), .01);
+	}
+
+	@Test
+	public void testReturnChangeNoBalance() {
+		assertEquals(0, vend1.returnChange(), .01);
+	}
+
+	@Test
+	public void testReturnChangeMakePurchase() {
 		vend1.addItem(item1, "A");
 		vend1.insertMoney(20);
 		vend1.makePurchase("A");
